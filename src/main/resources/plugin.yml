@@ -1,0 +1,4 @@
+name: TestFontProject
+version: '${project.version}'
+main: xyz.larkyy.fontcomponents.testfontproject.TestFontProject
+api-version: 1.19
