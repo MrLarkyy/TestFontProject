@@ -6,7 +6,6 @@ import xyz.larkyy.fontcomponents.fontcomponents.ComponentHolder;
 import xyz.larkyy.fontcomponents.fontcomponents.ComponentRepository;
 import xyz.larkyy.fontcomponents.fontcomponents.FontComponents;
 import xyz.larkyy.fontcomponents.fontcomponents.components.impl.BasicComponent;
-import xyz.larkyy.fontcomponents.fontcomponents.components.impl.CenterComponent;
 import xyz.larkyy.fontcomponents.fontcomponents.components.impl.OffsetComponent;
 
 public final class TestFontProject extends JavaPlugin {
@@ -17,42 +16,58 @@ public final class TestFontProject extends JavaPlugin {
 
         ComponentRepository repository = fontComponents.getComponentRepository();
         repository.addComponent(
-                "UIComponent",
+                "Rewards1",
                 BasicComponent.builder()
-                        .setText("TEXTURE1")
-                        .setWidth(100)
+                        .setText("\uE001")
+                        .setWidth(235)
                         .build()
                 );
         repository.addComponent(
-                "NUM1",
+                "Rewards2",
                 BasicComponent.builder()
-                        .setText("NUM1_TEXTURE")
-                        .setWidth(10)
-                        .setCentered(true)
+                        .setText("\uE002")
+                        .setWidth(99)
                         .build()
-                );
-        OffsetComponent offset1 = new OffsetComponent("A",null,1);
-        OffsetComponent offset5 = new OffsetComponent("B",null,5);
-        OffsetComponent offset10 = new OffsetComponent("C",null,10);
-        OffsetComponent offsetN1 = new OffsetComponent("N",null,-1);
+        );
+        repository.addComponent(
+                "Button",
+                BasicComponent.builder()
+                        .setText("\uE003")
+                        .setWidth(50)
+                        .build()
+        );
+        OffsetComponent offset1 = new OffsetComponent("\uE004",null,1);
+        OffsetComponent offsetN1 = new OffsetComponent("\uE000",null,-1);
 
         repository.addOffset(1,offset1);
-        repository.addOffset(5,offset5);
-        repository.addOffset(10,offset10);
         repository.addOffset(-1,offsetN1);
 
         repository.addComponent("offset1",offset1);
-        repository.addComponent("offset5",offset5);
-        repository.addComponent("offset10",offset10);
-        repository.addComponent("offset-1",offsetN1);
+        repository.addComponent("offsetN1",offsetN1);
 
         ComponentHolder holder = new ComponentHolder();
-        holder.addComponent(repository.getComponent("UIComponent"));
-        holder.addComponent(repository.getComponent("NUM1"));
+        for (int i = 0; i <43;i++) {
+            holder.addComponent(repository.getComponent("offsetN1"));
+        }
+        holder.addComponent(BasicComponent.builder().setText("§f").build());
+        holder.addComponent(repository.getComponent("Rewards1"));
+        holder.addComponent(repository.getComponent("offsetN1"));
+        holder.addComponent(repository.getComponent("Rewards2"));
+        /*
+        for (int i = 0; i <290;i++) {
+            holder.addComponent(repository.getComponent("offsetN1"));
+        }
+        holder.addComponent(repository.getComponent("Button"));
+         */
 
         String string = holder.generate(null);
 
-        Bukkit.broadcastMessage(string);
+        TestInventory inv = new TestInventory(string);
+        Bukkit.getOnlinePlayers().forEach(player -> {
+            player.openInventory(inv.getInventory());
+        });
+
+        getServer().getPluginManager().registerEvents(new Listeners(),this);
     }
 
     @Override
